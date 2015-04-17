@@ -1,18 +1,18 @@
 <?php
-# This file contains functions for the chat room single sign on.
+# This file contains functions for the Website Toolbox chat room single sign on.
 
 # Replace USERNAME with your chat room username.
-define("HOST","USERNAME.discussionchatroom.com");
+define("HOST","monika.websitetoolbox.com:6789");
 # Get The API Key from the Settings -> Single Sign On section of the Website Toolbox chat room admin area and replace APIKEY.
-define("API_KEY","APIKEY");
+define("API_KEY","1234567890");
 
-# Initializing session if it is not started in client project files to assign SSO login access_token into $_SESSION['access_token']. The $_SESSION['access_token'] is used in chatRoomLogout function to logout from the chat room.
+# Initializing session if it is not started in client project files to assign SSO login access_token into $_SESSION['access_token']. The $_SESSION['access_token'] is used in chatRoomLogout function to logout from the Website Toolbox chat room.
 # Checking current session status if it does not exist in client project files then session will be started.
 if (!$_SESSION) {session_start();}
 
-#Purpose: Function for registering a new user on the chat room. 
-#parmeter: Param $user an array containing information about the new user. The array user will contain mandatory values (username and email) which will be used to build URL query string to register a new user on the chat room. The array $user can also contain optional value such as password.
-# URL with all parameter from $user array passed in doHTTPCall function to create a request using curl or file and getting response from the chat room.
+#Purpose: Function for registering a new user on the Website Toolbox chat room. 
+#parmeter: Param $user an array containing information about the new user. The array user will contain mandatory values (username and email) which will be used to build URL query string to register a new user on the Website Toolbox chat room. The array $user can also contain optional value such as password.
+# URL with all parameter from $user array passed in doHTTPCall function to create a request using curl or file and getting response from the Website Toolbox chat room.
 #return: Parse and return user registration response status.
 
 function chatRoomSignup($user) {
@@ -25,7 +25,7 @@ function chatRoomSignup($user) {
 	# Generating a URL-encoded query string from the $user array.	
 	$parameters = http_build_query($user, NULL, '&');   
 	$URL = "/sso/user/register?apikey=".API_KEY."&".$parameters;
-	# making a request using curl or file and getting response from the chat room.
+	# making a request using curl or file and getting response from the Website Toolbox chat room.
 	$response = doHTTPCall($URL);
 	$response_json = json_decode($response, true);
 	echo $response_json['message'];
@@ -33,8 +33,73 @@ function chatRoomSignup($user) {
 	return $response_json['success'];		  
 }
 
-#Purpose: Function for deleting user(s) from the chat room. 
-#parmeter: Param $user an array containing information about users, need to be deleted. The array user will contain comma seperated username or email, which will be used to build URL query string to delete user(s) from the chat room. # URL with all parameter from $user array passed in doHTTPCall function to create a request using curl or file and getting response from the chat room.
+# Purpose: function for login to the Website Toolbox chat room. If given email does not exist, then the user is auto-regisered on the Website Toolbox chat room.
+# parmeter: Param $user an array containing information about the currently logged in user. The array user will contain mandatory (username and email) value which passed with apikey in request URL.
+# URL with user and apikey parameter passed in doHTTPCall function to create a request using curl or file and return access_token from the Website Toolbox chat room.
+# Assigned access_token into $_SESSION['access_token'].  
+# The returned access_token is checked for null. If it's not null then loaded with "sso/token/login?access_token" url through IMG src to login to the Website Toolbox chat room.
+# return: Returns user's login status as true or false.
+function chatRoomLogin($user) {
+	# Changes the case of all keys in an array
+	$user = array_change_key_case($user);	
+	foreach ($user as $key => $value) {
+	  if ($value === NULL)
+		 $user[$key] = '';
+	}
+	# Generating a URL-encoded query string from the $user array.	
+	$login_parameters = http_build_query($user, NULL, '&');
+	# user details stored in session which will used later in chatRoomLogout function. 
+	$_SESSION['login_parameters'] = $login_parameters;
+	$URL = "/sso/token/generate?apikey=".API_KEY."&".$login_parameters;
+	# making a request using curl or file and getting response from the Website Toolbox chat room.
+	$response = doHTTPCall($URL);
+	$response_json = json_decode($response, true);
+	$response_message = $response_json['message'];
+	$access_token = $response_json['access_token'];
+	echo $response_message;
+	# Check access_token for null. If access_token not null then load with "sso/token/login?access_token" url through IMG src to login to the Website Toolbox chat room.
+	if ($access_token) {
+		$_SESSION['access_token'] = $access_token;
+		echo "<br/><img src='http://".HOST."/sso/token/login?access_token=$access_token' border='0' width='1' height='1' alt=''/><a href='http://".HOST."/chatroom' target='_blank'>CHATROOM</a><br/><a href='logout_example.php'>LOGOUT</a>";
+		//echo "<a href='http://".HOST."/chatroom'>CHATROOM</a>";
+	} 
+	return $response_json['success']; 	
+}
+
+#Purpose: function for log out from the Website Toolbox chat room.
+# It check for $_SESSION['access_token'] if it's not null then the "sso/token/logout?access_token" is loaded with IMG src to logout user from the Website Toolbox chat room.
+# Reset access_token session variable $_SESSION['access_token'] to blank after successful log out.
+# return: the function will return log out status as true or false.
+function chatRoomLogout() {
+	# Check for access_token value. If it is not null then load /sso/token/logout?access_token url through IMG src to log out from the Website Toolbox chat room.
+	echo "called chatroomlogout";
+	if($_SESSION['access_token']) {
+		echo "got access_token in session.";
+		echo "<img src='http://".HOST."/sso/token/logout?access_token=".$_SESSION['access_token']."' border='0' width='1' height='1' alt=''>";
+		# Reset access_token session variable after log out.
+		$_SESSION['access_token'] = '';
+		return true;	
+	} else {
+		# If access_token is missing from session variable then making a HTTP request using curl and getting access_token from the Website Toolbox chat room. 
+		# Fetching user details from $_SESSION['login_parameters'], which was stored in session during user login.
+		# If access_token not null then the "/sso/token/logout?access_token" is loaded with IMG src to logout user from the Website Toolbox chat room. 
+		echo "not getting access_token in session";
+		$URL = "/sso/token/getToken?apikey=".API_KEY."&".$_SESSION['login_parameters'];
+		$response = doHTTPCall($URL);
+		$response_json = json_decode($response, true);
+		$response_message = $response_json['message'];
+		$access_token = $response_json['access_token'];
+		echo $response_message;
+		if($access_token) {
+			echo "<img src='http://".HOST."/sso/token/logout?access_token=".$access_token."' border='0' width='1' height='1' alt=''>";
+		} 
+		return $response_json['success'];
+	}	
+}
+
+#Purpose: Function for deleting user(s) from the Website Toolbox chat room. 
+#parmeter: Param $user an array containing information about users, who need to be deleted. The array user will contain comma seperated username or email, which will be used to build URL query string to delete user(s) from the Website Toolbox chat room. 
+#URL with all parameter from $user array passed in doHTTPCall function to create a request using curl or file and getting response from the Website Toolbox chat room.
 #return: Parse and return user deletion response status. 
 function userDeletionFromChatRoom($user) {
 	# Changes the case of all keys in an array
@@ -54,6 +119,10 @@ function userDeletionFromChatRoom($user) {
 	return $response_json['success'];		  
 }
 
+#Purpose: Function for setting the password of the user for the Website Toolbox chat room. This password can be used by the user for direct login to the Website Toolbox chat room. 
+#parmeter: Param $user an array containing information about user. The array user will contain user's username/email and password, which will be used to build URL query string to set the password for the user at the Website Toolbox chat room. 
+#URL with all parameter from $user array passed in doHTTPCall function to create a request using curl or file and getting response from the Website Toolbox chat room.
+#return: Parse and return response status. 
 function chatRoomSetPassword($user) {
 	# Changes the case of all keys in an array
 	$user = array_change_key_case($user);	
@@ -72,74 +141,12 @@ function chatRoomSetPassword($user) {
 	return $response_json['success'];		  
 }
 
-# Purpose: function for login to the chat room. If email does not exist in the chat room, then the user is auto-regisered on chat room.
-# parmeter: Param $user an array containing information about the currently logged in user. The array user will contain mandatory (username and email) value which passed with apikey in request URL.
-# URL with user and apikey parameter passed in doHTTPCall function to create a request using curl or file and return access_token from the chat room.
-# Assigned access_token into $_SESSION['access_token'].  
-# The returned access_token is checked for null. If it's not null then loaded with "sso/token/login?access_token" url through IMG src to login to the chat room.
-# return: Returns user's login status as true or false from the chat room.
-function chatRoomLogin($user) {
-	# Changes the case of all keys in an array
-	$user = array_change_key_case($user);	
-	foreach ($user as $key => $value) {
-	  if ($value === NULL)
-		 $user[$key] = '';
-	}
-	# Generating a URL-encoded query string from the $user array.	
-	$login_parameters = http_build_query($user, NULL, '&');
-	# user details stored in session which will used later in chatRoomLogout function. 
-	$_SESSION['login_parameters'] = $login_parameters;
-	$URL = "/sso/token/generate?apikey=".API_KEY."&".$login_parameters;
-	# making a request using curl or file and getting response from the chat room.
-	$response = doHTTPCall($URL);
-	$response_json = json_decode($response, true);
-	$response_message = $response_json['message'];
-	$access_token = $response_json['access_token'];
-	echo $response_message;
-	# Check access_token for null. If access_token not null then load with "sso/token/login?access_token" url through IMG src to login to the chat room.
-	if ($access_token) {
-		$_SESSION['access_token'] = $access_token;
-		echo "<img src='http://".HOST."/sso/token/login?access_token=$access_token' border='0' width='1' height='1' alt=''>";
-	} 
-	return $response_json['success']; 	
-}
-#Purpose: function for log out from the chat room.
-# It check for $_SESSION['access_token'] if it's not null then the "sso/token/logout?access_token" is loaded with IMG src to logout user from the chat room.
-# Reset access_token session variable $_SESSION['access_token'] after successful log out.
-# return: the function will return log out status message as true or false from the chat room.
-function chatRoomLogout() {
-	# Check for access_token value. If it is not null then load /sso/token/logout?access_token url through IMG src to log out from the chat room.
-	if($_SESSION['access_token']) {
-		echo "<img src='http://".HOST."/sso/token/logout?access_token=".$_SESSION['access_token']."' border='0' width='1' height='1' alt=''>";
-		# Reset access_token session variable after log out.
-		$_SESSION['access_token'] = '';
-		return true;	
-	} else {
-		# If access_token is missing from session variable then making a HTTP request using curl and getting access_token from the chat room. 
-		# Passing user details via $_SESSION['login_parameters'] which stored in session during user login.
-		# If access_token not null then the "register/logout?authtoken" is loaded with IMG src to logout user from the chat room and return log out status message as true
-		# If access_token returned as null then appropriate error message will be returned. 
-		$URL = "/sso/token/getToken?apikey=".API_KEY."&".$_SESSION['login_parameters'];
-		$response = doHTTPCall($URL);
-		$response_json = json_decode($response, true);
-		$response_message = $response_json['message'];
-		$access_token = $response_json['access_token'];
-		echo $response_message;
-		if($authtoken) {
-			echo "<img src='http://".HOST."/sso/token/logout?access_token=".$access_token."' border='0' width='1' height='1' alt=''>";
-		} 
-		return $response_json['success'];
-	}	
-}
 
-
-
-#Purpose: Create a request using curl or file and getting response from the chat room.
-#parmeter: request URL which will use to make curl request to the chat room.
-#return: return response from the chat room.
+#Purpose: Create a request using curl or file and getting response from the Website Toolbox chat room.
+#parmeter: request URL which will use to make curl request to the Website Toolbox chat room.
+#return: return response from the Website Toolbox chat room.
 function doHTTPCall($URL){
 	if (_checkBasicFunctions("curl_init,curl_setopt,curl_exec,curl_close")) {
-		echo "invoking URL\n";
 		$ch = curl_init("http://".HOST.$URL);
 		curl_setopt($ch, CURLOPT_HEADER, 0);
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);

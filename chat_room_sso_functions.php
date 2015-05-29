@@ -2,9 +2,9 @@
 # This file contains functions for the Website Toolbox chat room single sign on.
 
 # Replace USERNAME with your chat room username.
-define("HOST","beta9.chatbeta.websitetoolbox.com");
+define("HOST","USERNAME.discussionchatroom.com");
 # Get The API Key from the Settings -> Single Sign On section of the Website Toolbox chat room admin area and replace APIKEY.
-define("API_KEY","6614e552b5be191813bf26fc8a57be8a");
+define("API_KEY","APIKEY");
 
 # Initializing session if it is not started in client project files to assign SSO login access_token into $_SESSION['access_token']. The $_SESSION['access_token'] is used in chatRoomLogout function to logout from the Website Toolbox chat room.
 # Checking current session status if it does not exist in client project files then session will be started.
@@ -49,13 +49,13 @@ function chatRoomLogin($user) {
 	# making a request using curl or file and getting response from the Website Toolbox chat room.
 	$response = doHTTPCall($URL);
 	$response_json = json_decode($response, true);
-	$response_message = $response_json['message'];
 	$access_token = $response_json['access_token'];
 	# Check access_token for null. If access_token not null then load with "sso/token/login?access_token" url through IMG src to login to the Website Toolbox chat room.
 	if ($access_token) {
 		$_SESSION['access_token'] = $access_token;
 		$avatarUrl = $user['avatarUrl'];
-		echo "<br/><img src='http://".HOST."/sso/token/login?access_token=$access_token&avatarUrl=$avatarUrl' border='0' width='1' height='1' alt=''/><a href='http://".HOST."/chatroom'>CHATROOM</a><br/><a href='logout_example.php'>LOGOUT</a>";
+		$rememberMe = $user['rememberMe'];
+		echo "<br/><img src='http://".HOST."/sso/token/login?access_token=$access_token&avatarUrl=$avatarUrl&rememberMe=$rememberMe' border='0' width='1' height='1' alt=''/><a href='http://".HOST."/chatroom'>CHATROOM</a><br/><a href='logout_example.php'>LOGOUT</a>";
 		//echo "<a href='http://".HOST."/chatroom'>CHATROOM</a>";
 	} 
 	return $response_json['success']; 	
@@ -67,7 +67,6 @@ function chatRoomLogin($user) {
 # return: the function will return log out status as true or false.
 function chatRoomLogout() {
 	# Check for access_token value. If it is not null then load /sso/token/logout?access_token url through IMG src to log out from the Website Toolbox chat room.
-	echo "called chatroomlogout";
 	if($_SESSION['access_token']) {
 		echo "<img src='http://".HOST."/sso/token/logout?access_token=".$_SESSION['access_token']."' border='0' width='1' height='1' alt=''>";
 		# Reset access_token session variable after log out.

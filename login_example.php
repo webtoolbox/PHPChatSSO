@@ -18,6 +18,7 @@ $user = array();
 $user['username'] = $_POST['username'];
 $user['email'] = $_POST['email'];
 $user['avatarUrl'] = $_POST['avatarUrl'];
+$user['rememberMe'] = $_POST['rememberMe'];
 // The function will print an IMG tag to get login on the Website Toolbox chat room.
 // You can also get access_token $_SESSION['access_token'] that can be further used for hiding "login" page after successful login and displaying "logout" page on your website.
 // The function will return login status as boolean flag.

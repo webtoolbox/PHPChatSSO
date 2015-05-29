@@ -2,9 +2,9 @@
 # This file contains functions for the Website Toolbox chat room single sign on.
 
 # Replace USERNAME with your chat room username.
-define("HOST","monika.websitetoolbox.com:6789");
+define("HOST","beta9.chatbeta.websitetoolbox.com");
 # Get The API Key from the Settings -> Single Sign On section of the Website Toolbox chat room admin area and replace APIKEY.
-define("API_KEY","1234567890");
+define("API_KEY","6614e552b5be191813bf26fc8a57be8a");
 
 # Initializing session if it is not started in client project files to assign SSO login access_token into $_SESSION['access_token']. The $_SESSION['access_token'] is used in chatRoomLogout function to logout from the Website Toolbox chat room.
 # Checking current session status if it does not exist in client project files then session will be started.
@@ -16,8 +16,6 @@ if (!$_SESSION) {session_start();}
 #return: Parse and return user registration response status.
 
 function chatRoomSignup($user) {
-	# Changes the case of all keys in an array
-	$user = array_change_key_case($user);	
 	foreach ($user as $key => $value) {
 	  if ($value === NULL)
 		 $user[$key] = '';
@@ -28,7 +26,6 @@ function chatRoomSignup($user) {
 	# making a request using curl or file and getting response from the Website Toolbox chat room.
 	$response = doHTTPCall($URL);
 	$response_json = json_decode($response, true);
-	echo $response_json['message'];
 	# returning sso register response
 	return $response_json['success'];		  
 }
@@ -40,8 +37,6 @@ function chatRoomSignup($user) {
 # The returned access_token is checked for null. If it's not null then loaded with "sso/token/login?access_token" url through IMG src to login to the Website Toolbox chat room.
 # return: Returns user's login status as true or false.
 function chatRoomLogin($user) {
-	# Changes the case of all keys in an array
-	$user = array_change_key_case($user);	
 	foreach ($user as $key => $value) {
 	  if ($value === NULL)
 		 $user[$key] = '';
@@ -56,11 +51,11 @@ function chatRoomLogin($user) {
 	$response_json = json_decode($response, true);
 	$response_message = $response_json['message'];
 	$access_token = $response_json['access_token'];
-	echo $response_message;
 	# Check access_token for null. If access_token not null then load with "sso/token/login?access_token" url through IMG src to login to the Website Toolbox chat room.
 	if ($access_token) {
 		$_SESSION['access_token'] = $access_token;
-		echo "<br/><img src='http://".HOST."/sso/token/login?access_token=$access_token' border='0' width='1' height='1' alt=''/><a href='http://".HOST."/chatroom' target='_blank'>CHATROOM</a><br/><a href='logout_example.php'>LOGOUT</a>";
+		$avatarUrl = $user['avatarUrl'];
+		echo "<br/><img src='http://".HOST."/sso/token/login?access_token=$access_token&avatarUrl=$avatarUrl' border='0' width='1' height='1' alt=''/><a href='http://".HOST."/chatroom'>CHATROOM</a><br/><a href='logout_example.php'>LOGOUT</a>";
 		//echo "<a href='http://".HOST."/chatroom'>CHATROOM</a>";
 	} 
 	return $response_json['success']; 	
@@ -74,7 +69,6 @@ function chatRoomLogout() {
 	# Check for access_token value. If it is not null then load /sso/token/logout?access_token url through IMG src to log out from the Website Toolbox chat room.
 	echo "called chatroomlogout";
 	if($_SESSION['access_token']) {
-		echo "got access_token in session.";
 		echo "<img src='http://".HOST."/sso/token/logout?access_token=".$_SESSION['access_token']."' border='0' width='1' height='1' alt=''>";
 		# Reset access_token session variable after log out.
 		$_SESSION['access_token'] = '';
@@ -83,13 +77,11 @@ function chatRoomLogout() {
 		# If access_token is missing from session variable then making a HTTP request using curl and getting access_token from the Website Toolbox chat room. 
 		# Fetching user details from $_SESSION['login_parameters'], which was stored in session during user login.
 		# If access_token not null then the "/sso/token/logout?access_token" is loaded with IMG src to logout user from the Website Toolbox chat room. 
-		echo "not getting access_token in session";
 		$URL = "/sso/token/getToken?apikey=".API_KEY."&".$_SESSION['login_parameters'];
 		$response = doHTTPCall($URL);
 		$response_json = json_decode($response, true);
 		$response_message = $response_json['message'];
 		$access_token = $response_json['access_token'];
-		echo $response_message;
 		if($access_token) {
 			echo "<img src='http://".HOST."/sso/token/logout?access_token=".$access_token."' border='0' width='1' height='1' alt=''>";
 		} 
@@ -102,8 +94,6 @@ function chatRoomLogout() {
 #URL with all parameter from $user array passed in doHTTPCall function to create a request using curl or file and getting response from the Website Toolbox chat room.
 #return: Parse and return user deletion response status. 
 function userDeletionFromChatRoom($user) {
-	# Changes the case of all keys in an array
-	$user = array_change_key_case($user);	
 	foreach ($user as $key => $value) {
 	  if ($value === NULL)
 		 $user[$key] = '';
@@ -114,7 +104,6 @@ function userDeletionFromChatRoom($user) {
 	# making a request using curl or file and getting response from the Website Toolbox.
 	$response = doHTTPCall($URL);
 	$response_json = json_decode($response, true);
-	echo $response_json['message'];
 	# returning sso register response
 	return $response_json['success'];		  
 }
@@ -124,8 +113,6 @@ function userDeletionFromChatRoom($user) {
 #URL with all parameter from $user array passed in doHTTPCall function to create a request using curl or file and getting response from the Website Toolbox chat room.
 #return: Parse and return response status. 
 function chatRoomSetPassword($user) {
-	# Changes the case of all keys in an array
-	$user = array_change_key_case($user);	
 	foreach ($user as $key => $value) {
 	  if ($value === NULL)
 		 $user[$key] = '';
@@ -136,7 +123,6 @@ function chatRoomSetPassword($user) {
 	# making a request using curl or file and getting response from the Website Toolbox.
 	$response = doHTTPCall($URL);
 	$response_json = json_decode($response, true);
-	echo $response_json['message'];
 	# returning sso register response
 	return $response_json['success'];		  
 }

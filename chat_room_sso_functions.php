@@ -55,7 +55,7 @@ function chatRoomLogin($user) {
 		$_SESSION['access_token'] = $access_token;
 		$avatarUrl = $user['avatarUrl'];
 		$rememberMe = $user['rememberMe'];
-		echo "<br/><img src='http://".HOST."/sso/token/login?access_token=$access_token&avatarUrl=$avatarUrl&rememberMe=$rememberMe' border='0' width='1' height='1' alt=''/><a href='http://".HOST."/chatroom'>CHATROOM</a><br/><a href='logout_example.php'>LOGOUT</a>";
+		echo "<br/><img src='http://".HOST."/sso/token/login?access_token=$access_token&avatarUrl=$avatarUrl&rememberMe=$rememberMe' border='0' width='1' height='1' alt=''/><a href='http://".HOST."/chatroom'>CHAT ROOM</a><br/><a href='logout_example.php'>LOGOUT</a>";
 		//echo "<a href='http://".HOST."/chatroom'>CHATROOM</a>";
 	} 
 	return $response_json['success']; 	

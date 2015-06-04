@@ -14,5 +14,7 @@ The following files are included in this repo:
   This file offers an example usage for user deletion via SSO API. You can customize this page or start from scratch.
 * [`setPassword_example.php`](https://github.com/webtoolbox/PHPChatSSO/blob/beta/setPassword_example.php)
   This file offers an example usage for set password for user via SSO API. You can customize this page or start from scratch.
+* [`index.html`](https://github.com/webtoolbox/PHPChatSSO/blob/beta/index.html)
+  This file offers a very basic user interface to make HTTP requests for login, set password, user registration and deletion. You can customize this page or start from scratch.  
 
-Note that PHP's cURL extension is required. That is installed on most servers by default.
+This example uses [`cURL`](http://php.net/manual/en/book.curl.php) to make HTTP requests. Most servers have cURL pre-installed. If you don't have the cURL php extension installed on your server, you can [`install it`](http://php.net/manual/en/curl.installation.php) or use a different method to make HTTP requests.  

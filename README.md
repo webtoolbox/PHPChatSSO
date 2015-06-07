@@ -1,5 +1,5 @@
 # PHPChatSSO
-Contains client files for integrating Single Sign On and Single Registration in PHP with a Website Toolbox Chat Room.
+Contains client files for integrating Single Sign On and Single Registration in PHP with a [`Website Toolbox Chat Room`](http://www.websitetoolbox.com/chat_room/index.html).
 The following files are included in this repo:
 
 * [`chat_room_sso_functions.php`](https://github.com/webtoolbox/PHPChatSSO/blob/beta/chat_room_sso_functions.php)

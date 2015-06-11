@@ -12,9 +12,9 @@ The following files are included in this repo:
   This file offers an example usage for SSO logout. You can customize this page or start from scratch.
 * [`userDeletion_example.php`](https://github.com/webtoolbox/PHPChatSSO/blob/beta/userDeletion_example.php)
   This file offers an example usage for user deletion via SSO API. You can customize this page or start from scratch.
-* [`setPassword_example.php`](https://github.com/webtoolbox/PHPChatSSO/blob/beta/setPassword_example.php)
-  This file offers an example usage for set password for user via SSO API. You can customize this page or start from scratch.
+* [`edit_user_example.php`](https://github.com/webtoolbox/PHPChatSSO/blob/beta/edit_user_example.php)
+  This file offers an example usage for editing the details of the chat room user via SSO API. You can customize this page or start from scratch.
 * [`index.html`](https://github.com/webtoolbox/PHPChatSSO/blob/beta/index.html)
-  This file offers a very basic user interface to make HTTP requests for login, set password, user registration and deletion. You can customize this page or start from scratch.  
+  This file offers a very basic user interface to make HTTP requests for login, user registration, user deletion and edit user details. You can customize this page or start from scratch.  
 
 This example uses [`cURL`](http://php.net/manual/en/book.curl.php) to make HTTP requests. Most servers have cURL pre-installed. If you don't have the cURL php extension installed on your server, you can [`install it`](http://php.net/manual/en/curl.installation.php) or use a different method to make HTTP requests.  

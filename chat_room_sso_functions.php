@@ -12,7 +12,7 @@ if (!$_SESSION) {session_start();}
 
 #Purpose: Function for registering a new user on the Website Toolbox chat room. 
 #parmeter: Param $user an array containing information about the new user. The array user will contain mandatory values (username and email) which will be used to build URL query string to register a new user on the Website Toolbox chat room. The array $user can also contain optional value such as password.
-# URL with all parameter from $user array passed in doHTTPCall function to create a request using curl or file and getting response from the Website Toolbox chat room.
+# URL with all parameter from $user array passed in doHTTPCall function to create a request using curl and getting response from the Website Toolbox chat room.
 #return: Parse and return user registration response status.
 
 function chatRoomSignup($user) {
@@ -23,7 +23,7 @@ function chatRoomSignup($user) {
 	# Generating a URL-encoded query string from the $user array.	
 	$parameters = http_build_query($user, NULL, '&');   
 	$URL = "/sso/user/register?apikey=".API_KEY."&".$parameters;
-	# making a request using curl or file and getting response from the Website Toolbox chat room.
+	# making a request using curl and getting response from the Website Toolbox chat room.
 	$response = doHTTPCall($URL);
 	$response_json = json_decode($response, true);
 	# returning sso register response
@@ -32,7 +32,7 @@ function chatRoomSignup($user) {
 
 # Purpose: function for login to the Website Toolbox chat room. If given email does not exist, then the user is auto-regisered on the Website Toolbox chat room.
 # parmeter: Param $user an array containing information about the currently logged in user. The array user will contain mandatory (username and email) value which passed with apikey in request URL.
-# URL with user and apikey parameter passed in doHTTPCall function to create a request using curl or file and return access_token from the Website Toolbox chat room.
+# URL with user and apikey parameter passed in doHTTPCall function to create a request using curl and return access_token from the Website Toolbox chat room.
 # Assigned access_token into $_SESSION['access_token'].  
 # The returned access_token is checked for null. If it's not null then loaded with "sso/token/login?access_token" url through IMG src to login to the Website Toolbox chat room.
 # return: Returns user's login status as true or false.
@@ -46,7 +46,7 @@ function chatRoomLogin($user) {
 	# user details stored in session which will used later in chatRoomLogout function. 
 	$_SESSION['login_parameters'] = $login_parameters;
 	$URL = "/sso/token/generate?apikey=".API_KEY."&".$login_parameters;
-	# making a request using curl or file and getting response from the Website Toolbox chat room.
+	# making a request using curl and getting response from the Website Toolbox chat room.
 	$response = doHTTPCall($URL);
 	$response_json = json_decode($response, true);
 	$access_token = $response_json['access_token'];
@@ -90,7 +90,7 @@ function chatRoomLogout() {
 
 #Purpose: Function for deleting user(s) from the Website Toolbox chat room. 
 #parmeter: Param $user an array containing information about users, who need to be deleted. The array user will contain comma seperated username or email, which will be used to build URL query string to delete user(s) from the Website Toolbox chat room. 
-#URL with all parameter from $user array passed in doHTTPCall function to create a request using curl or file and getting response from the Website Toolbox chat room.
+#URL with all parameter from $user array passed in doHTTPCall function to create a request using curl and getting response from the Website Toolbox chat room.
 #return: Parse and return user deletion response status. 
 function userDeletionFromChatRoom($user) {
 	foreach ($user as $key => $value) {
@@ -100,26 +100,26 @@ function userDeletionFromChatRoom($user) {
 	# Generating a URL-encoded query string from the $user array.	
 	$parameters = http_build_query($user, NULL, '&');   
 	$URL = "/sso/user/delete?apikey=".API_KEY."&".$parameters;
-	# making a request using curl or file and getting response from the Website Toolbox.
+	# making a request using curl and getting response from the Website Toolbox.
 	$response = doHTTPCall($URL);
 	$response_json = json_decode($response, true);
 	# returning sso register response
 	return $response_json['success'];		  
 }
 
-#Purpose: Function for setting the password of the user for the Website Toolbox chat room. This password can be used by the user for direct login to the Website Toolbox chat room. 
-#parmeter: Param $user an array containing information about user. The array user will contain user's username/email and password, which will be used to build URL query string to set the password for the user at the Website Toolbox chat room. 
-#URL with all parameter from $user array passed in doHTTPCall function to create a request using curl or file and getting response from the Website Toolbox chat room.
+#Purpose: Function for editing the details of the user for the Website Toolbox chat room. 
+#parmeter: Param $user an array containing information about user. The array user will contain user's username/email and parameters which need to be updated and will be used to build URL query string to edit the details for the user at the Website Toolbox chat room. 
+#URL with all parameter from $user array passed in doHTTPCall function to create a request using curl and getting response from the Website Toolbox chat room.
 #return: Parse and return response status. 
-function chatRoomSetPassword($user) {
+function editChatRoomUserDetails($user) {
 	foreach ($user as $key => $value) {
 	  if ($value === NULL)
 		 $user[$key] = '';
 	}
 	# Generating a URL-encoded query string from the $user array.	
 	$parameters = http_build_query($user, NULL, '&');   
-	$URL = "/sso/user/setPassword?apikey=".API_KEY."&".$parameters;
-	# making a request using curl or file and getting response from the Website Toolbox.
+	$URL = "/sso/user/edit?apikey=".API_KEY."&".$parameters;
+	# making a request using curl and getting response from the Website Toolbox.
 	$response = doHTTPCall($URL);
 	$response_json = json_decode($response, true);
 	# returning sso register response

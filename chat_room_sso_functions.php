@@ -53,10 +53,10 @@ function chatRoomLogin($user) {
 	# Check access_token for null. If access_token not null then load with "sso/token/login?access_token" url through IMG src to login to the Website Toolbox chat room.
 	if ($access_token) {
 		$_SESSION['access_token'] = $access_token;
-		$avatarUrl = $user['avatarUrl'];
 		$rememberMe = $user['rememberMe'];
-		echo "<br/><img src='http://".HOST."/sso/token/login?access_token=$access_token&avatarUrl=$avatarUrl&rememberMe=$rememberMe' border='0' width='1' height='1' alt=''/><a href='http://".HOST."/chatroom'>CHAT ROOM</a><br/><a href='logout_example.php'>LOGOUT</a>";
-		//echo "<a href='http://".HOST."/chatroom'>CHATROOM</a>";
+		if($rememberMe)
+			$rememberMe = 1;
+		echo "<br/><img src='http://".HOST."/sso/token/login?access_token=$access_token&rememberMe=$rememberMe' border='0' width='1' height='1' alt=''/><a href='http://".HOST."/chatroom'>CHAT ROOM</a><br/><a href='logout_example.php'>LOGOUT</a>";
 	} 
 	return $response_json['success']; 	
 }

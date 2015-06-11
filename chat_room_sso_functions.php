@@ -103,7 +103,7 @@ function userDeletionFromChatRoom($user) {
 	# making a request using curl and getting response from the Website Toolbox.
 	$response = doHTTPCall($URL);
 	$response_json = json_decode($response, true);
-	# returning sso register response
+	# returning response of delete user API request
 	return $response_json['success'];		  
 }
 
@@ -122,7 +122,7 @@ function editChatRoomUserDetails($user) {
 	# making a request using curl and getting response from the Website Toolbox.
 	$response = doHTTPCall($URL);
 	$response_json = json_decode($response, true);
-	# returning sso register response
+	# returning response of edit user API request
 	return $response_json['success'];		  
 }
 

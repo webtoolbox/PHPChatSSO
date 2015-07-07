@@ -26,6 +26,12 @@ function chatRoomSignup($user) {
 	# making a request using curl and getting response from the Website Toolbox chat room.
 	$response = doHTTPCall($URL);
 	$response_json = json_decode($response, true);
+	$access_token = $response_json['access_token'];
+	# Check access_token for null. If access_token not null then load with "sso/token/login?access_token" url through IMG src to login to the Website Toolbox chat room.
+	if ($access_token) {
+		$_SESSION['access_token'] = $access_token;
+		echo "<br/><img src='http://".HOST."/sso/token/login?access_token=$access_token' border='0' width='1' height='1' alt=''/><a href='http://".HOST."/chatroom'>CHAT ROOM</a><br/><a href='logout_example.php'>LOGOUT</a>";
+	} 
 	# returning sso register response
 	return $response_json['success'];		  
 }

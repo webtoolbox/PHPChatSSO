@@ -23,6 +23,7 @@ $user = array();
 $user['username'] = $_POST['username'];
 $user['email'] = $_POST['email'];
 $user['password'] = $_POST['password'];
+$user['avatarUrl'] = $_POST['avatarUrl'];
 
 
 // function called for registering a new user on the Website Toolbox chat room.

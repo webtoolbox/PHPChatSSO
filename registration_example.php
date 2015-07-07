@@ -19,7 +19,7 @@ $user = array();
 //$user['email'] = 'john.php@anonymous.com';	
 // Assign password for new registration. This is optional parameter. 
 //$user['password'] = 'john123';
-// Assign avatarUrl (profile picture URL), if you want to set the Website Toolbox chat room profile picture same as your application. This image will be shown on the Website Toolbox chat room, if user has not set his/her avatar yet on the chat room. This is optional parameter. 
+// Assign avatarUrl (profile picture URL), if you want to set the Website Toolbox chat room profile picture same as your application. This image will be shown on the Website Toolbox chat room. This is optional parameter. 
 //$user['avatarUrl'] = 'http://fc09.deviantart.net/fs71/f/2010/330/9/e/profile_icon_by_art311-d33mwsf.png';
 
 $user['username'] = $_POST['username'];

@@ -11,8 +11,10 @@ define("API_KEY","APIKEY");
 if (!$_SESSION) {session_start();}
 
 #Purpose: Function for registering a new user on the Website Toolbox chat room. 
-#parmeter: Param $user an array containing information about the new user. The array user will contain mandatory values (username and email) which will be used to build URL query string to register a new user on the Website Toolbox chat room. The array $user can also contain optional value such as password.
-# URL with all parameter from $user array passed in doHTTPCall function to create a request using curl and getting response from the Website Toolbox chat room.
+#parmeter: Param $user an array containing information about the new user. The array user will contain mandatory values (username and email) which will be used to build URL query string to register a new user on the Website Toolbox chat room. The array $user can also contain optional value such as password, avatarUrl.
+# URL with user and apikey parameter passed in doHTTPCall function to create a request using curl and getting access_token from the Website Toolbox chat room on successful registration.
+# Assigned access_token into $_SESSION['access_token'].  
+# The returned access_token is checked for null. If it's not null then loaded with "sso/token/login?access_token" url through IMG src to login to the Website Toolbox chat room.
 #return: Parse and return user registration response status.
 
 function chatRoomSignup($user) {

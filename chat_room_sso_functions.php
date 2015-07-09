@@ -11,8 +11,10 @@ define("API_KEY","APIKEY");
 if (!$_SESSION) {session_start();}
 
 #Purpose: Function for registering a new user on the Website Toolbox chat room. 
-#parmeter: Param $user an array containing information about the new user. The array user will contain mandatory values (username and email) which will be used to build URL query string to register a new user on the Website Toolbox chat room. The array $user can also contain optional value such as password.
-# URL with all parameter from $user array passed in doHTTPCall function to create a request using curl and getting response from the Website Toolbox chat room.
+#parmeter: Param $user an array containing information about the new user. The array user will contain mandatory values (username and email) which will be used to build URL query string to register a new user on the Website Toolbox chat room. The array $user can also contain optional value such as password, avatarUrl.
+# URL with user and apikey parameter passed in doHTTPCall function to create a request using curl and getting access_token from the Website Toolbox chat room on successful registration.
+# Assigned access_token into $_SESSION['access_token'].  
+# The returned access_token is checked for null. If it's not null then loaded with "sso/token/login?access_token" url through IMG src to login to the Website Toolbox chat room.
 #return: Parse and return user registration response status.
 
 function chatRoomSignup($user) {
@@ -26,6 +28,12 @@ function chatRoomSignup($user) {
 	# making a request using curl and getting response from the Website Toolbox chat room.
 	$response = doHTTPCall($URL);
 	$response_json = json_decode($response, true);
+	$access_token = $response_json['access_token'];
+	# Check access_token for null. If access_token not null then load with "sso/token/login?access_token" url through IMG src to login to the Website Toolbox chat room.
+	if ($access_token) {
+		$_SESSION['access_token'] = $access_token;
+		echo "<br/><img src='http://".HOST."/sso/token/login?access_token=$access_token' border='0' width='1' height='1' alt=''/><a href='http://".HOST."/chatroom'>CHAT ROOM</a><br/><a href='logout_example.php'>LOGOUT</a>";
+	} 
 	# returning sso register response
 	return $response_json['success'];		  
 }

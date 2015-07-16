@@ -64,7 +64,7 @@ function chatRoomLogin($user) {
 		$rememberMe = $user['rememberMe'];
 		if($rememberMe)
 			$rememberMe = 1;
-		echo "<br/><img src='http://".HOST."/sso/token/login?access_token=$access_token&rememberMe=$rememberMe' border='0' width='1' height='1' alt=''/><a href='http://".HOST."/chatroom'>CHAT ROOM</a><br/><a href='logout_example.php'>LOGOUT</a>";
+		echo "<br/><img src='http://".HOST."/sso/token/login?access_token=$access_token&rememberMe=$rememberMe' border='0' width='1' height='1' alt=''/><a href='http://".HOST."'>CHAT ROOM</a><br/><a href='logout_example.php'>LOGOUT</a>";
 	} 
 	return $response_json['success']; 	
 }

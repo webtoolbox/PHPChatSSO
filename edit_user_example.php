@@ -13,9 +13,8 @@ $user = array();
 // For example: You can assign your POST/GET values to user array like below:
 // $user['user'] = $_POST['user'].
 
-// Assign username, for which the details have to be updated.
-//$user['user'] = 'john';
-//You can also edit details using user's email address. For example: $user['user'] = 'john@gmail.com';
+// Assign email of the user, whose details have to be updated.
+//$user['user'] = 'john@yahoo.com';
 //Assign details needs to be set for the user. 
 //$user['password'] = 'john123';
 

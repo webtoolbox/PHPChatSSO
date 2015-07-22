@@ -11,10 +11,10 @@ $user = array();
 
 // After successful deletion on your website, assign the user information to $user array to delete the user from the Website Toolbox chat room.
 // For example: You can assign your POST/GET values to user array like below:
-// $user['users'] = $_POST['users'].
-$user['users'] = $_POST['username'];
-// Assign comma (,) seperated username or email of multiple users, who need to be deleted.
-//$user['users'] = 'john,mark@gmail.com,aryan';
+// $user['emails'] = $_POST['emails'].
+$user['emails'] = $_POST['emails'];
+// Assign comma (,) seperated emails of multiple users, who need to be deleted.
+//$user['emails'] = 'john@yahoo.com,mark@gmail.com,aryan@hotmail.com';
 
 // function called for deleting users from the Website Toolbox chat room.
 // Return the response status as boolean flag.

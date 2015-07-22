@@ -39,7 +39,7 @@ function chatRoomSignup($user) {
 }
 
 # Purpose: function for login to the Website Toolbox chat room. If given email does not exist, then the user is auto-regisered on the Website Toolbox chat room.
-# parmeter: Param $user an array containing information about the currently logged in user. The array user will contain mandatory (username and email) value which passed with apikey in request URL.
+# parmeter: Param $user an array containing information about the currently logged in user. The array user will contain mandatory parameter (email) and optional parameters (username, avatarUrl, rememberMe and password) which passed with apikey in request URL.
 # URL with user and apikey parameter passed in doHTTPCall function to create a request using curl and return access_token from the Website Toolbox chat room.
 # Assigned access_token into $_SESSION['access_token'].  
 # The returned access_token is checked for null. If it's not null then loaded with "sso/token/login?access_token" url through IMG src to login to the Website Toolbox chat room.

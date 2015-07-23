@@ -10,7 +10,7 @@ require_once dirname(__FILE__).'/chat_room_sso_functions.php';
 $user = array();
 // After successful login to your website, assign the username and email in user array. 
 // The email address is a mandatory field for login.
-// The username is optional. However, it should be provided if possible because then the user can automatically be created if their account doesn't already exit when we try to log them in.
+// The username is an optional parameter that will only be used if the account needs to be created because it doesn't already exist.
 //$user['username'] = 'john';
 //$user['email'] = 'john.php@anonymous.com';	
 // Assign password for new registration. This is optional parameter. 

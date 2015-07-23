@@ -9,7 +9,8 @@ require_once dirname(__FILE__).'/chat_room_sso_functions.php';
 // Fill in the user information in a way that the Website Toolbox chat room can understand.
 $user = array();
 // After successful login to your website, assign the username and email in user array. 
-//Here, the username and email both are required. Because, chat room provide auto registration feature while login, if user is not already registered at the Website Toolbox chat room.
+// The email address is a mandatory field for login.
+// The username is optional. However, it should be provided if possible because then the user can automatically be created if their account doesn't already exit when we try to log them in.
 //$user['username'] = 'john';
 //$user['email'] = 'john.php@anonymous.com';	
 // Assign password for new registration. This is optional parameter. 

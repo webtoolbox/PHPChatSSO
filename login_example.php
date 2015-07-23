@@ -10,10 +10,9 @@ require_once dirname(__FILE__).'/chat_room_sso_functions.php';
 $user = array();
 // After successful login to your website, assign the username and email in user array. 
 // The email address is a mandatory field for login.
-// The username is an optional parameter that will only be used if the account needs to be created because it doesn't already exist.
+//$user['email'] = 'john.php@anonymous.com';
+// The username and password are optional parameters that will only be used if the account needs to be created because it doesn't already exist.
 //$user['username'] = 'john';
-//$user['email'] = 'john.php@anonymous.com';	
-// Assign password for new registration. This is optional parameter. 
 //$user['password'] = 'john123';
 // Assign avatarUrl (profile picture URL), if you want to set the Website Toolbox chat room profile picture same as your application. This image will be shown on the Website Toolbox chat room, if user has not set his/her avatar yet on the chat room. This is optional parameter. 
 //$user['avatarUrl'] = 'http://fc09.deviantart.net/fs71/f/2010/330/9/e/profile_icon_by_art311-d33mwsf.png';
